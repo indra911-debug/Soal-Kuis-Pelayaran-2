@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Petualangan Pelaut Eropa - 20 Soal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ship-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .copy-success {
+            animation: copySuccess 2s ease-in-out;
+        }
+        @keyframes copySuccess {
+            0% { background-color: #10b981; }
+            100% { background-color: #3b82f6; }
+        }
+        .login-container {
+            backdrop-filter: blur(10px);
+            background: rgba(30, 41, 59, 0.9);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 min-h-screen text-white font-serif">
+    
+    <!-- Login Screen -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="login-container rounded-2xl shadow-2xl p-8 w-full max-w-md border border-slate-600">
+            <div class="text-center mb-8">
+                <div class="text-6xl mb-4 ship-animation">⚓</div>
+                <h1 class="text-3xl font-bold text-yellow-300 mb-2">Petualangan Pelaut Eropa</h1>
+                <p class="text-blue-200">Masuk untuk memulai kuis</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Nama Pengguna</label>
+                    <input type="text" id="username" required
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Masukkan nama Anda">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Kata Sandi</label>
+                    <input type="password" id="password" required
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Masukkan kata sandi">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Masuk Sebagai</label>
+                    <select id="userRole" 
+                            class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+                        <option value="student">👨‍🎓 Siswa</option>
+                        <option value="teacher">👩‍🏫 Guru/Penilai</option>
+                    </select>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    🚀 Masuk
+                </button>
+            </form>
+
+            <div class="mt-6 text-center space-y-2">
+                <button onclick="showDemoAccounts()" class="text-blue-300 hover:text-blue-200 text-sm underline block w-full">
+                    📋 Lihat Akun Demo
+                </button>
+                <button onclick="showRegisterModal()" class="text-green-300 hover:text-green-200 text-sm underline block w-full">
+                    ➕ Daftar Akun Baru
+                </button>
+            </div>
+
+            <div id="loginError" class="mt-4 hidden">
+                <div class="bg-red-600 border border-red-400 rounded-lg p-3 text-center">
+                    <span class="text-sm">❌ Nama pengguna atau kata sandi salah!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Accounts Modal -->
+    <div id="demoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+        <div class="bg-slate-800 rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-yellow-300">📋 Akun Demo</h3>
+                <button onclick="closeDemoModal()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                    ✕
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <h4 class="font-bold text-green-400 mb-2">👨‍🎓 Akun Siswa</h4>
+                    <div class="text-sm space-y-1">
+                        <div><strong>Username:</strong> siswa1</div>
+                        <div><strong>Password:</strong> siswa123</div>
+                        <div class="text-blue-200">• Dapat mengerjakan kuis</div>
+                        <div class="text-blue-200">• Mendapat link hasil permanen</div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <h4 class="font-bold text-purple-400 mb-2">👩‍🏫 Akun Guru</h4>
+                    <div class="text-sm space-y-1">
+                        <div><strong>Username:</strong> guru1</div>
+                        <div><strong>Password:</strong> guru123</div>
+                        <div class="text-blue-200">• Akses panel penilai</div>
+                        <div class="text-blue-200">• Lihat semua hasil siswa</div>
+                        <div class="text-blue-200">• Export data CSV</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center">
+                <button onclick="closeDemoModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+        <div class="bg-slate-800 rounded-xl p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-yellow-300">➕ Daftar Akun Baru</h3>
+                <button onclick="closeRegisterModal()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                    ✕
+                </button>
+            </div>
+            
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Nama Lengkap</label>
+                    <input type="text" id="regFullName" required maxlength="50"
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Masukkan nama lengkap Anda">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Username</label>
+                    <input type="text" id="regUsername" required minlength="3" maxlength="20"
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Pilih username (3-20 karakter)">
+                    <p class="text-xs text-blue-300 mt-1">Username harus unik dan tidak boleh sama dengan yang sudah ada</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Kata Sandi</label>
+                    <input type="password" id="regPassword" required minlength="6"
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Buat kata sandi (min. 6 karakter)">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Konfirmasi Kata Sandi</label>
+                    <input type="password" id="regPasswordConfirm" required
+                           class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                           placeholder="Ulangi kata sandi">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-blue-200 mb-2">Daftar Sebagai</label>
+                    <select id="regRole" 
+                            class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent">
+                        <option value="student">👨‍🎓 Siswa</option>
+                        <option value="teacher">👩‍🏫 Guru/Penilai</option>
+                    </select>
+                </div>
+
+                <div class="bg-blue-900/50 rounded-lg p-3">
+                    <p class="text-sm text-blue-200">
+                        💡 <strong>Catatan:</strong> Akun yang dibuat akan tersimpan di browser ini. 
+                        Pastikan mengingat username dan password Anda.
+                    </p>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                        ✅ Daftar
+                    </button>
+                    <button type="button" onclick="closeRegisterModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                        ❌ Batal
+                    </button>
+                </div>
+            </form>
+
+            <div id="registerError" class="mt-4 hidden">
+                <div class="bg-red-600 border border-red-400 rounded-lg p-3 text-center">
+                    <span class="text-sm" id="registerErrorText">❌ Terjadi kesalahan!</span>
+                </div>
+            </div>
+
+            <div id="registerSuccess" class="mt-4 hidden">
+                <div class="bg-green-600 border border-green-400 rounded-lg p-3 text-center">
+                    <span class="text-sm">✅ Akun berhasil dibuat! Silakan login.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="mainApp" class="hidden">
+        <div class="container mx-auto px-4 py-8">
+            <!-- Header -->
+            <div class="text-center mb-8 fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 text-yellow-300">⚓ Petualangan Pelaut Eropa ⚓</h1>
+                <p class="text-xl text-blue-200">Ikuti perjalanan epik para penjelajah samudra - 20 Soal</p>
+                
+                <!-- User Info & Logout -->
+                <div class="mt-4 flex justify-center items-center space-x-4">
+                    <div class="bg-slate-700 rounded-lg px-4 py-2">
+                        <span class="text-blue-200">Selamat datang, </span>
+                        <span id="currentUser" class="font-bold text-yellow-300 cursor-pointer hover:text-yellow-200" onclick="showNameChangeModal()" title="Klik untuk mengubah nama"></span>
+                        <span id="userRoleDisplay" class="text-sm text-blue-300 ml-2"></span>
+                    </div>
+                    <button onclick="showNameChangeModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                        ✏️ Ubah Nama
+                    </button>
+                    <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm">
+                        🚪 Keluar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="max-w-4xl mx-auto mb-8">
+                <div class="bg-slate-700 rounded-full h-3">
+                    <div id="progressBar" class="bg-gradient-to-r from-yellow-400 to-orange-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-center mt-2 text-blue-200">Kemajuan: <span id="progressText">0/20</span></p>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quizContainer" class="max-w-4xl mx-auto bg-gradient-to-r from-slate-800 to-slate-700 rounded-2xl shadow-2xl p-8 mb-8 fade-in">
+                <!-- Quiz content will be inserted here -->
+            </div>
+
+            <!-- Score Display -->
+            <div id="scoreDisplay" class="fixed top-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded-lg shadow-lg">
+                <div class="font-bold">Skor: <span id="score">0</span>/20</div>
+            </div>
+
+            <!-- Admin Panel Button (Only for teachers) -->
+            <div id="adminButton" class="fixed top-4 left-4 hidden">
+                <button onclick="showAdminPanel()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-lg">
+                    📊 Panel Penilai
+                </button>
+            </div>
+
+            <!-- Teacher Dashboard (Only for teachers) -->
+            <div id="teacherDashboard" class="hidden max-w-6xl mx-auto bg-gradient-to-r from-purple-800 to-purple-700 rounded-2xl shadow-2xl p-8 mb-8">
+                <h2 class="text-3xl font-bold text-yellow-300 mb-6 text-center">👩‍🏫 Dashboard Guru</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <button onclick="showAdminPanel()" class="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-xl text-center transition-all transform hover:scale-105">
+                        <div class="text-3xl mb-2">📊</div>
+                        <div class="font-bold">Panel Penilai</div>
+                        <div class="text-sm text-blue-200">Lihat semua hasil kuis</div>
+                    </button>
+                    
+                    <button onclick="startQuizAsTeacher()" class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-xl text-center transition-all transform hover:scale-105">
+                        <div class="text-3xl mb-2">📝</div>
+                        <div class="font-bold">Coba Kuis</div>
+                        <div class="text-sm text-green-200">Kerjakan kuis sebagai contoh</div>
+                    </button>
+                    
+                    <button onclick="showQuizPreview()" class="bg-orange-600 hover:bg-orange-700 text-white p-6 rounded-xl text-center transition-all transform hover:scale-105">
+                        <div class="text-3xl mb-2">👁️</div>
+                        <div class="font-bold">Preview Soal</div>
+                        <div class="text-sm text-orange-200">Lihat semua soal kuis</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Panel Modal -->
+            <div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+                <div class="bg-slate-800 rounded-xl p-6 w-full max-w-6xl max-h-screen overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-yellow-300">📊 Panel Penilai - Hasil Kuis</h3>
+                        <button onclick="closeAdminPanel()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            Tutup
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        <button onclick="refreshResults()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                            🔄 Refresh Data
+                        </button>
+                        <button onclick="exportResults()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+                            📥 Export CSV
+                        </button>
+                        <button onclick="clearAllResults()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            🗑️ Hapus Semua Data
+                        </button>
+                    </div>
+
+                    <div id="adminContent">
+                        <!-- Admin content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Detail Modal -->
+            <div id="resultModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+                <div class="bg-slate-800 rounded-xl p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-yellow-300">🔍 Detail Hasil Kuis</h3>
+                        <button onclick="closeResultModal()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+                            Tutup
+                        </button>
+                    </div>
+                    
+                    <div id="resultContent">
+                        <!-- Result content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name Change Modal -->
+            <div id="nameChangeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden px-4">
+                <div class="bg-slate-800 rounded-xl p-6 w-full max-w-md">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-yellow-300">✏️ Ubah Nama Tampilan</h3>
+                        <button onclick="closeNameChangeModal()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                            ✕
+                        </button>
+                    </div>
+                    
+                    <form id="nameChangeForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-blue-200 mb-2">Nama Baru</label>
+                            <input type="text" id="newDisplayName" required maxlength="50"
+                                   class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                                   placeholder="Masukkan nama baru Anda">
+                        </div>
+                        
+                        <div class="bg-blue-900/50 rounded-lg p-3">
+                            <p class="text-sm text-blue-200">
+                                💡 <strong>Tips:</strong> Nama ini akan muncul di hasil kuis dan dapat dilihat oleh penilai. 
+                                Gunakan nama asli atau nama yang mudah dikenali.
+                            </p>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                                ✅ Simpan
+                            </button>
+                            <button type="button" onclick="closeNameChangeModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                                ❌ Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // User Management System
+        let users = {
+            // Students
+            'siswa1': { password: 'siswa123', role: 'student', name: 'Siswa Demo 1' },
+            'siswa2': { password: 'siswa123', role: 'student', name: 'Siswa Demo 2' },
+            'andi': { password: 'andi123', role: 'student', name: 'Andi Pratama' },
+            'sari': { password: 'sari123', role: 'student', name: 'Sari Dewi' },
+            'budi': { password: 'budi123', role: 'student', name: 'Budi Santoso' },
+            
+            // Teachers
+            'guru1': { password: 'guru123', role: 'teacher', name: 'Guru Demo' },
+            'pak_ahmad': { password: 'ahmad123', role: 'teacher', name: 'Ahmad Setiawan, S.Pd' },
+            'bu_rina': { password: 'rina123', role: 'teacher', name: 'Rina Sari, M.Pd' }
+        };
+
+        // Load custom users from localStorage
+        function loadCustomUsers() {
+            const customUsers = localStorage.getItem('customUsers');
+            if (customUsers) {
+                const parsed = JSON.parse(customUsers);
+                users = { ...users, ...parsed };
+                console.log('Custom users loaded:', parsed); // Debug log
+                console.log('All users now:', users); // Debug log
+            }
+        }
+
+        // Save custom users to localStorage
+        function saveCustomUsers() {
+            const customUsers = {};
+            for (const [username, userData] of Object.entries(users)) {
+                // Only save non-default users
+                if (!['siswa1', 'siswa2', 'andi', 'sari', 'budi', 'guru1', 'pak_ahmad', 'bu_rina'].includes(username)) {
+                    customUsers[username] = userData;
+                }
+            }
+            localStorage.setItem('customUsers', JSON.stringify(customUsers));
+            console.log('Custom users saved:', customUsers); // Debug log
+        }
+
+        // Save user registration info to database
+        function saveUserToDatabase(username, userData) {
+            users[username] = userData;
+            saveCustomUsers();
+            console.log('User saved to database:', username, userData);
+        }
+
+        // Registration Functions
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+            document.getElementById('regFullName').focus();
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerError').classList.add('hidden');
+            document.getElementById('registerSuccess').classList.add('hidden');
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const fullName = document.getElementById('regFullName').value.trim();
+            const username = document.getElementById('regUsername').value.trim().toLowerCase();
+            const password = document.getElementById('regPassword').value;
+            const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+            const role = document.getElementById('regRole').value;
+            
+            // Validation
+            if (fullName.length < 2) {
+                showRegisterError('Nama lengkap harus minimal 2 karakter!');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showRegisterError('Username harus minimal 3 karakter!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showRegisterError('Password harus minimal 6 karakter!');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                showRegisterError('Konfirmasi password tidak cocok!');
+                return;
+            }
+            
+            // Check if username already exists
+            if (users[username]) {
+                showRegisterError('Username sudah digunakan! Pilih username lain.');
+                return;
+            }
+            
+            // Create new user data
+            const newUserData = {
+                password: password,
+                role: role,
+                name: fullName,
+                registeredAt: new Date().toISOString(),
+                isActive: true
+            };
+            
+            // Save user to database
+            saveUserToDatabase(username, newUserData);
+            
+            console.log('New user registered:', { username, fullName, role }); // Debug log
+            
+            // Show success message
+            showRegisterSuccess();
+            
+            // Reset form
+            document.getElementById('registerForm').reset();
+            
+            // Auto close after 2 seconds
+            setTimeout(() => {
+                closeRegisterModal();
+            }, 2000);
+        }
+
+        function showRegisterError(message) {
+            const errorDiv = document.getElementById('registerError');
+            const errorText = document.getElementById('registerErrorText');
+            errorText.textContent = '❌ ' + message;
+            errorDiv.classList.remove('hidden');
+            document.getElementById('registerSuccess').classList.add('hidden');
+        }
+
+        function showRegisterSuccess() {
+            document.getElementById('registerSuccess').classList.remove('hidden');
+            document.getElementById('registerError').classList.add('hidden');
+        }
+
+        let currentUser = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 20;
+        let startTime = Date.now();
+        let userAnswers = [];
+
+        const questions = [
+            {
+                question: "Peristiwa apa yang memicu bangsa Eropa mencari jalur perdagangan baru ke Asia?",
+                options: [
+                    "Perang Salib berakhir",
+                    "Jatuhnya Konstantinopel ke Ottoman tahun 1453",
+                    "Penemuan benua Amerika",
+                    "Wabah Black Death di Eropa"
+                ],
+                correct: 1,
+                explanation: "Jatuhnya Konstantinopel ke tangan Ottoman memblokir jalur perdagangan tradisional ke Asia, memaksa Eropa mencari rute alternatif."
+            },
+            {
+                question: "Siapa yang dikenal sebagai pelopor eksplorasi maritim Portugal?",
+                options: [
+                    "Vasco da Gama",
+                    "Bartolomeu Dias",
+                    "Pangeran Henry the Navigator",
+                    "Ferdinand Magellan"
+                ],
+                correct: 2,
+                explanation: "Pangeran Henry mendirikan sekolah navigasi di Sagres dan membiayai banyak ekspedisi eksplorasi."
+            },
+            {
+                question: "Teknologi apa yang paling membantu pelaut Eropa dalam navigasi laut terbuka?",
+                options: [
+                    "Teleskop",
+                    "Kompas magnetik dan astrolabe",
+                    "Mesin uap",
+                    "Radar"
+                ],
+                correct: 1,
+                explanation: "Kompas magnetik untuk arah dan astrolabe untuk menentukan posisi berdasarkan bintang adalah teknologi kunci navigasi."
+            },
+            {
+                question: "Apa nama asli yang diberikan Bartolomeu Dias untuk Tanjung Harapan?",
+                options: [
+                    "Cabo da Boa Esperança",
+                    "Cabo Tormentoso (Tanjung Badai)",
+                    "Cabo Verde",
+                    "Cabo das Tormentas"
+                ],
+                correct: 1,
+                explanation: "Dias menamakannya Tanjung Badai karena cuaca buruk yang dialami, tapi raja mengubahnya menjadi Tanjung Harapan."
+            },
+            {
+                question: "Berapa lama selang waktu antara ekspedisi Dias dan da Gama?",
+                options: [
+                    "5 tahun",
+                    "10 tahun",
+                    "15 tahun",
+                    "20 tahun"
+                ],
+                correct: 1,
+                explanation: "Dias mencapai Tanjung Harapan pada 1488, da Gama berangkat ke India pada 1497."
+            },
+            {
+                question: "Berapa persen keuntungan yang diperoleh dari ekspedisi Vasco da Gama?",
+                options: [
+                    "1000%",
+                    "3000%",
+                    "6000%",
+                    "10000%"
+                ],
+                correct: 2,
+                explanation: "Keuntungan mencapai 6000%, menunjukkan betapa berharganya rempah-rempah Asia di pasar Eropa."
+            },
+            {
+                question: "Mengapa Spanyol memilih berlayar ke barat untuk mencapai Asia?",
+                options: [
+                    "Jalur timur sudah dikuasai Portugal",
+                    "Jalur barat lebih pendek",
+                    "Cuaca di barat lebih baik",
+                    "Teknologi kapal Spanyol lebih cocok untuk barat"
+                ],
+                correct: 0,
+                explanation: "Portugal sudah menguasai jalur timur, sehingga Spanyol mencari alternatif dengan berlayar ke barat."
+            },
+            {
+                question: "Berapa jumlah kapal yang dibawa Magellan dalam ekspedisinya?",
+                options: [
+                    "3 kapal",
+                    "4 kapal",
+                    "5 kapal",
+                    "6 kapal"
+                ],
+                correct: 2,
+                explanation: "Magellan berangkat dengan 5 kapal: Trinidad, San Antonio, Concepción, Victoria, dan Santiago."
+            },
+            {
+                question: "Di mana dan kapan Magellan terbunuh?",
+                options: [
+                    "Di Maluku, 1520",
+                    "Di Mactan, Filipina, 1521",
+                    "Di Guam, 1521",
+                    "Di Spanyol, 1522"
+                ],
+                correct: 1,
+                explanation: "Magellan terbunuh dalam pertempuran melawan Lapu-Lapu di pulau Mactan, Filipina pada 27 April 1521."
+            },
+            {
+                question: "Siapa yang memimpin sisa ekspedisi Magellan setelah kematiannya?",
+                options: [
+                    "Juan Sebastián Elcano",
+                    "Francisco Albo",
+                    "Antonio Pigafetta",
+                    "Gonzalo Gómez de Espinosa"
+                ],
+                correct: 0,
+                explanation: "Elcano memimpin kapal Victoria dan 17 awak lainnya menyelesaikan perjalanan mengelilingi dunia."
+            },
+            {
+                question: "Apa perbedaan antara privateer dan bajak laut biasa?",
+                options: [
+                    "Privateer lebih kuat dari bajak laut",
+                    "Privateer bekerja dengan izin resmi pemerintah",
+                    "Privateer hanya menyerang di malam hari",
+                    "Privateer tidak mengambil harta karun"
+                ],
+                correct: 1,
+                explanation: "Privateer memiliki 'letter of marque' atau izin resmi dari pemerintah untuk menyerang kapal musuh."
+            },
+            {
+                question: "Apa keunggulan utama Belanda dalam persaingan perdagangan maritim?",
+                options: [
+                    "Tentara yang lebih kuat",
+                    "Teknologi perkapalan dan sistem perbankan yang maju",
+                    "Wilayah yang lebih luas",
+                    "Dukungan dari Paus"
+                ],
+                correct: 1,
+                explanation: "Belanda unggul dalam teknologi kapal dan memiliki sistem perbankan yang mendukung investasi perdagangan jarak jauh."
+            },
+            {
+                question: "Mengapa perusahaan-perusahaan dagang Belanda bersatu membentuk VOC?",
+                options: [
+                    "Diperintah oleh pemerintah Belanda",
+                    "Menghindari persaingan internal dan memperkuat posisi",
+                    "Kehabisan modal untuk beroperasi sendiri",
+                    "Mengikuti model perusahaan Inggris"
+                ],
+                correct: 1,
+                explanation: "Persaingan antar perusahaan Belanda merugikan semua pihak, sehingga mereka bersatu untuk efisiensi dan kekuatan."
+            },
+            {
+                question: "Benar atau Salah: Motivasi utama penjelajahan samudra Eropa adalah menyebarkan agama Kristen.",
+                options: ["Benar", "Salah"],
+                correct: 1,
+                explanation: "Salah! Meskipun penyebaran agama menjadi faktor, motivasi utama adalah ekonomi - menguasai perdagangan rempah-rempah."
+            },
+            {
+                question: "Benar atau Salah: Portugal langsung berlayar ke ujung selatan Afrika tanpa pemetaan bertahap.",
+                options: ["Benar", "Salah"],
+                correct: 1,
+                explanation: "Salah! Portugal melakukan eksplorasi bertahap selama puluhan tahun, memetakan pantai Afrika sedikit demi sedikit."
+            },
+            {
+                question: "Benar atau Salah: Vasco da Gama adalah orang Eropa pertama yang mencapai India melalui jalur laut.",
+                options: ["Benar", "Salah"],
+                correct: 0,
+                explanation: "Benar! Da Gama mencapai Calicut pada Mei 1498, membuka jalur perdagangan maritim langsung Eropa-India."
+            },
+            {
+                question: "Benar atau Salah: Selat Magellan menghubungkan Samudra Atlantik dan Pasifik.",
+                options: ["Benar", "Salah"],
+                correct: 0,
+                explanation: "Benar! Selat Magellan adalah jalur air yang menghubungkan kedua samudra di ujung selatan Amerika Selatan."
+            },
+            {
+                question: "Benar atau Salah: Drake mengelilingi dunia murni untuk eksplorasi ilmiah.",
+                options: ["Benar", "Salah"],
+                correct: 1,
+                explanation: "Salah! Meskipun mengelilingi dunia, tujuan utama Drake adalah merampas harta karun Spanyol untuk Inggris."
+            },
+            {
+                question: "Benar atau Salah: VOC hanya berhak berdagang, tidak boleh memiliki tentara.",
+                options: ["Benar", "Salah"],
+                correct: 1,
+                explanation: "Salah! VOC memiliki hak untuk memiliki tentara, membuat perjanjian, dan bahkan mengumumkan perang - kekuatan seperti negara."
+            },
+            {
+                question: "Kapan VOC (Vereenigde Oostindische Compagnie) didirikan?",
+                options: [
+                    "1600",
+                    "1602",
+                    "1605",
+                    "1610"
+                ],
+                correct: 1,
+                explanation: "VOC didirikan pada tahun 1602 sebagai hasil penggabungan berbagai perusahaan dagang Belanda."
+            }
+        ];
+
+        // Login System Functions
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('userRole').value;
+            
+            console.log('Login attempt:', { username, role }); // Debug log
+            console.log('Available users:', Object.keys(users)); // Debug log
+            console.log('User data for', username, ':', users[username]); // Debug log
+            
+            if (users[username] && users[username].password === password && users[username].role === role) {
+                currentUser = {
+                    username: username,
+                    name: users[username].name,
+                    role: users[username].role
+                };
+                
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showMainApp();
+            } else {
+                console.log('Login failed - checking conditions:');
+                console.log('User exists:', !!users[username]);
+                if (users[username]) {
+                    console.log('Password match:', users[username].password === password);
+                    console.log('Role match:', users[username].role === role);
+                }
+                showLoginError();
+            }
+        }
+
+        function showLoginError() {
+            document.getElementById('loginError').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('loginError').classList.add('hidden');
+            }, 3000);
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            document.getElementById('currentUser').textContent = currentUser.name;
+            document.getElementById('userRoleDisplay').textContent = 
+                currentUser.role === 'teacher' ? '(👩‍🏫 Guru)' : '(👨‍🎓 Siswa)';
+            
+            if (currentUser.role === 'teacher') {
+                document.getElementById('teacherDashboard').classList.remove('hidden');
+                document.getElementById('adminButton').classList.remove('hidden');
+                document.getElementById('progressContainer').style.display = 'none';
+                document.getElementById('scoreDisplay').style.display = 'none';
+                showTeacherDashboard();
+            } else {
+                document.getElementById('teacherDashboard').classList.add('hidden');
+                document.getElementById('adminButton').classList.add('hidden');
+                startQuiz();
+            }
+        }
+
+        function showTeacherDashboard() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = `
+                <div class="text-center">
+                    <div class="text-6xl mb-6">👩‍🏫</div>
+                    <h2 class="text-3xl font-bold text-yellow-300 mb-4">Selamat Datang, ${currentUser.name}!</h2>
+                    <p class="text-xl text-blue-200 mb-8">Pilih menu di atas untuk mengelola kuis dan melihat hasil siswa.</p>
+                    
+                    <div class="bg-slate-600 rounded-xl p-6">
+                        <h3 class="text-xl font-bold text-yellow-300 mb-4">📋 Menu Guru</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <button onclick="showAdminPanel()" class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-lg transition-all">
+                                <div class="text-2xl mb-2">📊</div>
+                                <div class="font-bold">Panel Penilai</div>
+                            </button>
+                            <button onclick="startQuizAsTeacher()" class="bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg transition-all">
+                                <div class="text-2xl mb-2">📝</div>
+                                <div class="font-bold">Coba Kuis</div>
+                            </button>
+                            <button onclick="showQuizPreview()" class="bg-orange-600 hover:bg-orange-700 text-white p-4 rounded-lg transition-all">
+                                <div class="text-2xl mb-2">👁️</div>
+                                <div class="font-bold">Preview Soal</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startQuizAsTeacher() {
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('scoreDisplay').style.display = 'block';
+            startQuiz();
+        }
+
+        function showQuizPreview() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = `
+                <div>
+                    <div class="text-center mb-6">
+                        <h2 class="text-3xl font-bold text-yellow-300 mb-4">👁️ Preview Semua Soal Kuis</h2>
+                        <p class="text-blue-200">Berikut adalah semua soal dalam kuis ini:</p>
+                    </div>
+                    
+                    <div class="space-y-6 max-h-96 overflow-y-auto">
+                        ${questions.map((q, index) => `
+                            <div class="bg-slate-600 rounded-lg p-6">
+                                <h3 class="font-bold text-yellow-300 mb-3">Soal ${index + 1}</h3>
+                                <p class="text-white mb-4">${q.question}</p>
+                                <div class="space-y-2">
+                                    ${q.options.map((option, optIndex) => `
+                                        <div class="flex items-center">
+                                            <span class="font-bold text-yellow-300 mr-2">${String.fromCharCode(65 + optIndex)}.</span>
+                                            <span class="${optIndex === q.correct ? 'text-green-400 font-bold' : 'text-blue-200'}">${option}</span>
+                                            ${optIndex === q.correct ? '<span class="ml-2 text-green-400">✅</span>' : ''}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="mt-3 p-3 bg-slate-700 rounded">
+                                    <strong class="text-blue-300">Penjelasan:</strong>
+                                    <span class="text-blue-200">${q.explanation}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="text-center mt-6">
+                        <button onclick="showTeacherDashboard()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">
+                            ← Kembali ke Dashboard
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function logout() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                sessionStorage.removeItem('currentUser');
+                currentUser = null;
+                currentQuestion = 0;
+                score = 0;
+                userAnswers = [];
+                
+                document.getElementById('mainApp').classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                document.getElementById('loginForm').reset();
+            }
+        }
+
+        function showDemoAccounts() {
+            document.getElementById('demoModal').classList.remove('hidden');
+        }
+
+        function closeDemoModal() {
+            document.getElementById('demoModal').classList.add('hidden');
+        }
+
+
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            startTime = Date.now();
+            userAnswers = [];
+            document.getElementById('score').textContent = score;
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            const container = document.getElementById('quizContainer');
+            
+            container.innerHTML = `
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-yellow-300 mb-4">Soal ${currentQuestion + 1} dari ${totalQuestions}</h2>
+                </div>
+                
+                <div class="bg-slate-600 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-6 text-yellow-300">❓ ${question.question}</h3>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => `
+                            <button onclick="selectAnswer(${index})" 
+                                    class="w-full text-left p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-yellow-400">
+                                <span class="font-bold text-yellow-300">${String.fromCharCode(65 + index)}.</span> ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div id="feedback" class="mt-6 hidden"></div>
+                <div id="nextButton" class="mt-6 text-center hidden">
+                    <button onclick="nextQuestion()" class="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        ${currentQuestion < questions.length - 1 ? 'Soal Berikutnya ⚓' : 'Lihat Hasil Akhir 🏆'}
+                    </button>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function selectAnswer(selectedIndex) {
+            const question = questions[currentQuestion];
+            const buttons = document.querySelectorAll('button[onclick^="selectAnswer"]');
+            const feedback = document.getElementById('feedback');
+            const nextButton = document.getElementById('nextButton');
+            
+            userAnswers.push({
+                questionIndex: currentQuestion,
+                question: question.question,
+                selectedAnswer: question.options[selectedIndex],
+                correctAnswer: question.options[question.correct],
+                isCorrect: selectedIndex === question.correct,
+                timestamp: new Date().toISOString()
+            });
+            
+            buttons.forEach(button => button.disabled = true);
+            
+            buttons.forEach((button, index) => {
+                if (index === question.correct) {
+                    button.classList.add('bg-green-600', 'border-green-400');
+                    button.classList.remove('bg-slate-700');
+                } else if (index === selectedIndex && selectedIndex !== question.correct) {
+                    button.classList.add('bg-red-600', 'border-red-400');
+                    button.classList.remove('bg-slate-700');
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                score++;
+                feedback.innerHTML = `
+                    <div class="bg-green-600 border border-green-400 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">✅</span>
+                            <span class="font-bold text-lg">Benar!</span>
+                        </div>
+                        <p>${question.explanation}</p>
+                    </div>
+                `;
+            } else {
+                feedback.innerHTML = `
+                    <div class="bg-red-600 border border-red-400 rounded-lg p-4">
+                        <div class="flex items-center mb-2">
+                            <span class="text-2xl mr-2">❌</span>
+                            <span class="font-bold text-lg">Kurang Tepat</span>
+                        </div>
+                        <p>${question.explanation}</p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('score').textContent = score;
+            feedback.classList.remove('hidden');
+            nextButton.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showFinalResults();
+            }
+        }
+
+        function showFinalResults() {
+            const container = document.getElementById('quizContainer');
+            const percentage = Math.round((score / totalQuestions) * 100);
+            let rank, message, emoji;
+            
+            const resultId = generateResultId();
+            const resultLink = generateResultLink(resultId);
+            
+            savePermanentResult(resultId, {
+                studentName: currentUser.name,
+                username: currentUser.username,
+                score: score,
+                totalQuestions: totalQuestions,
+                percentage: percentage,
+                completedAt: new Date().toISOString(),
+                answers: userAnswers,
+                timeSpent: getTimeSpent(),
+                rank: getRank(percentage)
+            });
+            
+            if (percentage >= 90) {
+                rank = "Admiral Legendaris";
+                message = "Luar biasa! Anda menguasai sejarah penjelajahan samudra dengan sempurna!";
+                emoji = "🏆";
+            } else if (percentage >= 80) {
+                rank = "Kapten Berpengalaman";
+                message = "Sangat bagus! Anda memiliki pengetahuan mendalam tentang para penjelajah.";
+                emoji = "⚓";
+            } else if (percentage >= 70) {
+                rank = "Navigator Handal";
+                message = "Bagus sekali! Anda memahami dengan baik sejarah maritim Eropa.";
+                emoji = "🧭";
+            } else if (percentage >= 60) {
+                rank = "Pelaut Terampil";
+                message = "Cukup baik! Anda memiliki dasar pengetahuan yang solid.";
+                emoji = "🚢";
+            } else if (percentage >= 50) {
+                rank = "Pelaut Pemula";
+                message = "Tidak buruk! Masih ada ruang untuk mempelajari lebih lanjut.";
+                emoji = "⛵";
+            } else {
+                rank = "Penumpang Kapal";
+                message = "Jangan menyerah! Cobalah lagi untuk mempelajari kisah-kisah heroik para penjelajah.";
+                emoji = "🌊";
+            }
+            
+            container.innerHTML = `
+                <div class="text-center">
+                    <div class="text-8xl mb-6">${emoji}</div>
+                    <h2 class="text-4xl font-bold text-yellow-300 mb-4">Petualangan Selesai!</h2>
+                    <div class="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl p-6 mb-6">
+                        <h3 class="text-2xl font-bold text-white mb-2">Peringkat: ${rank}</h3>
+                        <p class="text-xl text-white">Skor: ${score}/${totalQuestions} (${percentage}%)</p>
+                    </div>
+                    <p class="text-lg text-blue-200 mb-8">${message}</p>
+                    
+                    <div class="bg-purple-600 rounded-xl p-6 mb-6">
+                        <h4 class="text-xl font-bold text-white mb-4">🔗 Link Hasil Permanen</h4>
+                        <p class="text-sm text-purple-200 mb-3">Bagikan link ini kepada guru/penilai untuk melihat hasil kuis Anda:</p>
+                        <div class="bg-purple-800 rounded-lg p-3 mb-3">
+                            <div class="flex items-center justify-between">
+                                <input type="text" id="resultLink" value="${resultLink}" readonly 
+                                       class="bg-transparent text-white text-sm flex-1 mr-2" 
+                                       onclick="this.select()">
+                                <button onclick="copyResultLink()" id="copyBtn" 
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-all">
+                                    📋 Salin
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-purple-200">
+                            💡 Link ini akan tersimpan permanen dan bisa diakses kapan saja oleh penilai
+                        </p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <button onclick="restartQuiz()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            🔄 Mulai Kuis Baru
+                        </button>
+                        ${currentUser.role === 'teacher' ? `
+                            <button onclick="showTeacherDashboard()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                ← Kembali ke Dashboard Guru
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            startTime = Date.now();
+            userAnswers = [];
+            document.getElementById('score').textContent = score;
+            displayQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${currentQuestion + 1}/${totalQuestions}`;
+        }
+
+        // Utility Functions
+        function generateResultId() {
+            return 'result_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function generateResultLink(resultId) {
+            return window.location.origin + window.location.pathname + '?result=' + resultId;
+        }
+
+        function savePermanentResult(resultId, resultData) {
+            const permanentResults = JSON.parse(localStorage.getItem('permanentResults') || '{}');
+            permanentResults[resultId] = resultData;
+            localStorage.setItem('permanentResults', JSON.stringify(permanentResults));
+        }
+
+        function getPermanentResult(resultId) {
+            const permanentResults = JSON.parse(localStorage.getItem('permanentResults') || '{}');
+            return permanentResults[resultId] || null;
+        }
+
+        function getAllPermanentResults() {
+            const permanentResults = JSON.parse(localStorage.getItem('permanentResults') || '{}');
+            return Object.entries(permanentResults).map(([id, data]) => ({
+                id,
+                ...data
+            })).sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+        }
+
+        function copyResultLink() {
+            const linkInput = document.getElementById('resultLink');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '✅ Tersalin!';
+                copyBtn.classList.add('copy-success');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('copy-success');
+                }, 2000);
+            } catch (err) {
+                alert('Link berhasil dipilih. Tekan Ctrl+C untuk menyalin.');
+            }
+        }
+
+        function getTimeSpent() {
+            return Math.round((Date.now() - startTime) / 1000);
+        }
+
+        function getRank(percentage) {
+            if (percentage >= 90) return "Admiral Legendaris";
+            if (percentage >= 80) return "Kapten Berpengalaman";
+            if (percentage >= 70) return "Navigator Handal";
+            if (percentage >= 60) return "Pelaut Terampil";
+            if (percentage >= 50) return "Pelaut Pemula";
+            return "Penumpang Kapal";
+        }
+
+        // Name Change Functions
+        function showNameChangeModal() {
+            document.getElementById('nameChangeModal').classList.remove('hidden');
+            document.getElementById('newDisplayName').value = currentUser.name;
+            document.getElementById('newDisplayName').focus();
+        }
+
+        function closeNameChangeModal() {
+            document.getElementById('nameChangeModal').classList.add('hidden');
+            document.getElementById('nameChangeForm').reset();
+        }
+
+        function handleNameChange(event) {
+            event.preventDefault();
+            
+            const newName = document.getElementById('newDisplayName').value.trim();
+            
+            if (newName.length < 2) {
+                alert('Nama harus minimal 2 karakter!');
+                return;
+            }
+            
+            if (newName.length > 50) {
+                alert('Nama terlalu panjang! Maksimal 50 karakter.');
+                return;
+            }
+            
+            currentUser.name = newName;
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            document.getElementById('currentUser').textContent = newName;
+            closeNameChangeModal();
+            
+            const successDiv = document.createElement('div');
+            successDiv.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 fade-in';
+            successDiv.innerHTML = `
+                <div class="flex items-center">
+                    <span class="text-xl mr-2">✅</span>
+                    <span class="font-bold">Nama berhasil diubah!</span>
+                </div>
+            `;
+            
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 3000);
+        }
+
+        // Admin Functions
+        function showAdminPanel() {
+            document.getElementById('adminModal').classList.remove('hidden');
+            loadAdminContent();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function loadAdminContent() {
+            const results = getAllPermanentResults();
+            const content = document.getElementById('adminContent');
+            
+            if (results.length === 0) {
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h3 class="text-xl font-bold text-yellow-300 mb-2">Belum Ada Data</h3>
+                        <p class="text-blue-200">Belum ada hasil kuis yang tersimpan.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const totalParticipants = results.length;
+            const averageScore = Math.round(results.reduce((sum, r) => sum + r.score, 0) / totalParticipants);
+            const averagePercentage = Math.round(results.reduce((sum, r) => sum + r.percentage, 0) / totalParticipants);
+            const highestScore = Math.max(...results.map(r => r.score));
+            
+            content.innerHTML = `
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-600 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-white">${totalParticipants}</div>
+                        <div class="text-blue-200 text-sm">Total Peserta</div>
+                    </div>
+                    <div class="bg-green-600 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-white">${averageScore}/${totalQuestions}</div>
+                        <div class="text-green-200 text-sm">Rata-rata Skor</div>
+                    </div>
+                    <div class="bg-yellow-600 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-white">${averagePercentage}%</div>
+                        <div class="text-yellow-200 text-sm">Rata-rata %</div>
+                    </div>
+                    <div class="bg-purple-600 rounded-lg p-4 text-center">
+                        <div class="text-2xl font-bold text-white">${highestScore}/${totalQuestions}</div>
+                        <div class="text-purple-200 text-sm">Skor Tertinggi</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-700 rounded-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-600">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-yellow-300">Nama</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">Username</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">Skor</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">%</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">Peringkat</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">Waktu</th>
+                                    <th class="px-4 py-3 text-center text-yellow-300">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-600">
+                                ${results.map(result => `
+                                    <tr class="hover:bg-slate-600">
+                                        <td class="px-4 py-3">
+                                            <div class="font-medium text-white">${result.studentName}</div>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="text-blue-300 text-sm">${result.username || '-'}</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="font-bold ${result.percentage >= 80 ? 'text-green-400' : result.percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}">
+                                                ${result.score}/${result.totalQuestions}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="font-bold ${result.percentage >= 80 ? 'text-green-400' : result.percentage >= 60 ? 'text-yellow-400' : 'text-red-400'}">
+                                                ${result.percentage}%
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <span class="text-xs px-2 py-1 rounded-full ${getRankColor(result.percentage)}">
+                                                ${result.rank}
+                                            </span>
+                                        </td>
+                                        <td class="px-4 py-3 text-center text-blue-200 text-xs">
+                                            ${new Date(result.completedAt).toLocaleDateString('id-ID', {
+                                                day: '2-digit',
+                                                month: '2-digit', 
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
+                                        </td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button onclick="viewResultDetail('${result.id}')" 
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs mr-1">
+                                                Detail
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getRankColor(percentage) {
+            if (percentage >= 90) return 'bg-yellow-600 text-yellow-100';
+            if (percentage >= 80) return 'bg-green-600 text-green-100';
+            if (percentage >= 70) return 'bg-blue-600 text-blue-100';
+            if (percentage >= 60) return 'bg-purple-600 text-purple-100';
+            if (percentage >= 50) return 'bg-orange-600 text-orange-100';
+            return 'bg-red-600 text-red-100';
+        }
+
+        function viewResultDetail(resultId) {
+            const result = getPermanentResult(resultId);
+            if (!result) {
+                alert('Data hasil tidak ditemukan!');
+                return;
+            }
+
+            const modal = document.getElementById('resultModal');
+            const content = document.getElementById('resultContent');
+            
+            const timeSpentMinutes = Math.floor(result.timeSpent / 60);
+            const timeSpentSeconds = result.timeSpent % 60;
+            
+            content.innerHTML = `
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 mb-6">
+                    <h3 class="text-2xl font-bold text-white mb-2">${result.studentName}</h3>
+                    <p class="text-blue-200 mb-4">Username: ${result.username || 'Tidak tersedia'}</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-300">${result.score}/${result.totalQuestions}</div>
+                            <div class="text-blue-200 text-sm">Skor</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-yellow-300">${result.percentage}%</div>
+                            <div class="text-blue-200 text-sm">Persentase</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-yellow-300">${timeSpentMinutes}m ${timeSpentSeconds}s</div>
+                            <div class="text-blue-200 text-sm">Durasi</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold text-yellow-300">${result.rank}</div>
+                            <div class="text-blue-200 text-sm">Peringkat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-700 rounded-lg p-6">
+                    <h4 class="text-xl font-bold text-yellow-300 mb-4">📝 Detail Jawaban</h4>
+                    <div class="space-y-3 max-h-96 overflow-y-auto">
+                        ${result.answers.map((answer, index) => `
+                            <div class="border-l-4 ${answer.isCorrect ? 'border-green-500 bg-green-900/20' : 'border-red-500 bg-red-900/20'} pl-4 py-3 rounded-r">
+                                <div class="flex items-start justify-between mb-2">
+                                    <span class="font-medium text-blue-200">Soal ${index + 1}</span>
+                                    <span class="text-sm ${answer.isCorrect ? 'text-green-400' : 'text-red-400'}">
+                                        ${answer.isCorrect ? '✅ Benar' : '❌ Salah'}
+                                    </span>
+                                </div>
+                                <p class="text-white mb-2">${answer.question}</p>
+                                <div class="text-sm space-y-1">
+                                    <div>
+                                        <span class="text-blue-200">Jawaban:</span>
+                                        <span class="${answer.isCorrect ? 'text-green-400' : 'text-red-400'}">${answer.selectedAnswer}</span>
+                                    </div>
+                                    ${!answer.isCorrect ? `
+                                        <div>
+                                            <span class="text-blue-200">Jawaban Benar:</span>
+                                            <span class="text-green-400">${answer.correctAnswer}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeResultModal() {
+            document.getElementById('resultModal').classList.add('hidden');
+        }
+
+        function refreshResults() {
+            loadAdminContent();
+        }
+
+        function exportResults() {
+            const results = getAllPermanentResults();
+            if (results.length === 0) {
+                alert('Tidak ada data untuk diekspor!');
+                return;
+            }
+
+            let csv = 'Nama,Username,Skor,Total Soal,Persentase,Peringkat,Waktu Pengerjaan,Tanggal Selesai\n';
+            
+            results.forEach(result => {
+                const timeSpentMinutes = Math.floor(result.timeSpent / 60);
+                const timeSpentSeconds = result.timeSpent % 60;
+                const timeString = `${timeSpentMinutes}m ${timeSpentSeconds}s`;
+                const dateString = new Date(result.completedAt).toLocaleDateString('id-ID');
+                
+                csv += `"${result.studentName}","${result.username || ''}",${result.score},${result.totalQuestions},${result.percentage}%,"${result.rank}","${timeString}","${dateString}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `hasil_kuis_pelaut_eropa_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearAllResults() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data hasil kuis? Tindakan ini tidak dapat dibatalkan!')) {
+                localStorage.removeItem('permanentResults');
+                loadAdminContent();
+                alert('Semua data hasil kuis telah dihapus.');
+            }
+        }
+
+        // Initialize
+        function init() {
+            const savedUser = sessionStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainApp();
+                return;
+            }
+
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('nameChangeForm').addEventListener('submit', handleNameChange);
+        document.getElementById('registerForm').addEventListener('submit', handleRegister);
+
+        // Start the application
+        window.addEventListener('load', () => {
+            loadCustomUsers();
+            init();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98487cc834c95d17',t:'MTc1ODc4MTk4MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
